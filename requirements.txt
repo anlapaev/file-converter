@@ -1,1 +1,3 @@
 docx2pdf
+xlsx2pdf
+pdf2docx
