@@ -153,4 +153,3 @@ if __name__ == "__main__":
     btn_convert.pack(pady=(10, 0))
 
     root.mainloop()
-
