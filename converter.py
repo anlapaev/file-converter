@@ -22,18 +22,24 @@ from tkinter import filedialog, messagebox
 
 try:  # DOCX → PDF
     from docx2pdf import convert as docx2pdf_convert
-except Exception:  # noqa: BLE001
+    DOCX2PDF_ERROR = None
+except Exception as exc:  # noqa: BLE001
     docx2pdf_convert = None
+    DOCX2PDF_ERROR = exc
 
 try:  # XLSX → PDF
     from xlsx2pdf import xlsx2pdf as xlsx2pdf_convert
-except Exception:  # noqa: BLE001
+    XLSX2PDF_ERROR = None
+except Exception as exc:  # noqa: BLE001
     xlsx2pdf_convert = None
+    XLSX2PDF_ERROR = exc
 
 try:  # PDF → DOCX
     from pdf2docx import Converter as PDF2DocxConverter
-except Exception:  # noqa: BLE001
+    PDF2DOCX_ERROR = None
+except Exception as exc:  # noqa: BLE001
     PDF2DocxConverter = None
+    PDF2DOCX_ERROR = exc
 
 
 FORMATS = ["docx", "xlsx", "pdf"]
@@ -97,15 +103,21 @@ def convert_file() -> None:
             shutil.copyfile(src, dst)
         elif in_ext == "docx" and out_ext == "pdf":
             if docx2pdf_convert is None:
-                raise RuntimeError("Библиотека docx2pdf не установлена")
+                raise RuntimeError(
+                    f"Библиотека docx2pdf не установлена: {DOCX2PDF_ERROR}"
+                )
             docx2pdf_convert(src, dst)
         elif in_ext == "xlsx" and out_ext == "pdf":
             if xlsx2pdf_convert is None:
-                raise RuntimeError("Библиотека xlsx2pdf не установлена")
+                raise RuntimeError(
+                    f"Библиотека xlsx2pdf не установлена: {XLSX2PDF_ERROR}"
+                )
             xlsx2pdf_convert(src, dst)
         elif in_ext == "pdf" and out_ext == "docx":
             if PDF2DocxConverter is None:
-                raise RuntimeError("Библиотека pdf2docx не установлена")
+                raise RuntimeError(
+                    f"Библиотека pdf2docx не установлена: {PDF2DOCX_ERROR}"
+                )
             with PDF2DocxConverter(src) as cv:
                 cv.convert(dst)
         else:
