@@ -106,9 +106,8 @@ def convert_file() -> None:
         elif in_ext == "pdf" and out_ext == "docx":
             if PDF2DocxConverter is None:
                 raise RuntimeError("Библиотека pdf2docx не установлена")
-            cv = PDF2DocxConverter(src)
-            cv.convert(dst)
-            cv.close()
+            with PDF2DocxConverter(src) as cv:
+                cv.convert(dst)
         else:
             messagebox.showerror(
                 "Ошибка",
